@@ -68,7 +68,7 @@ calibracio_llum = input.lightLevel()
 radio.setGroup(1)
 atura_motors()
 basic.forever(function () {
-    if (input.lightLevel() < calibracio_llum - 5) {
+    if (input.lightLevel() < calibracio_llum - 10) {
         musiqueta()
         musiqueta()
         strip.showColor(neopixel.colors(NeoPixelColors.Black))
