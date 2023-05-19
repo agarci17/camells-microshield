@@ -1,8 +1,12 @@
 function musiqueta () {
     music.playMelody("C E G E C E G C ", 1000)
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
     music.playMelody("F A C5 A F A C5 F ", 1000)
+    strip.showColor(neopixel.colors(NeoPixelColors.Blue))
     music.playMelody("G B D G B D B G ", 1000)
+    strip.showColor(neopixel.colors(NeoPixelColors.Yellow))
     music.playMelody("F A C5 A F A C5 F ", 1000)
+    strip.showColor(neopixel.colors(NeoPixelColors.Green))
 }
 function iniciar_cursa () {
     microshield.Servo(microshield.Servos.S0, 180)
@@ -11,6 +15,13 @@ function iniciar_cursa () {
     microshield.Servo(microshield.Servos.S3, 0)
     basic.pause(9000)
     atura_motors()
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
+    strip.showColor(neopixel.colors(NeoPixelColors.Orange))
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Whole)), music.PlaybackMode.UntilDone)
+    strip.showColor(neopixel.colors(NeoPixelColors.Green))
+    music.play(music.tonePlayable(880, music.beat(BeatFraction.Double)), music.PlaybackMode.UntilDone)
+    strip.showColor(neopixel.colors(NeoPixelColors.Black))
 }
 radio.onReceivedNumber(function (receivedNumber) {
     if (receivedNumber == 1) {
@@ -41,6 +52,7 @@ function atura_motors () {
     microshield.Servo(microshield.Servos.S3, 80)
 }
 input.onButtonPressed(Button.B, function () {
+    calibracio_llum = input.lightLevel()
     basic.showNumber(input.lightLevel())
     microshield.Servo(microshield.Servos.S0, 0)
     microshield.Servo(microshield.Servos.S1, 0)
@@ -49,12 +61,17 @@ input.onButtonPressed(Button.B, function () {
     basic.pause(2000)
     atura_motors()
 })
+let calibracio_llum = 0
+let strip: neopixel.Strip = null
+strip = neopixel.create(DigitalPin.P16, 4, NeoPixelMode.RGB)
+calibracio_llum = input.lightLevel()
 radio.setGroup(1)
 atura_motors()
 basic.forever(function () {
-    if (input.lightLevel() < 30) {
+    if (input.lightLevel() < calibracio_llum - 5) {
         musiqueta()
         musiqueta()
+        strip.showColor(neopixel.colors(NeoPixelColors.Black))
         basic.pause(5000)
         iniciar_cursa()
     }
